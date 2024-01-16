@@ -1,0 +1,198 @@
+COMANDOS PARA AVALIACAO UFW, GROUP, HOST, LSBLK E SSH
+
+hostname -I mostra o ip pra poder acessar pelo terminal tbm
+ssh -p4242 gmaia-pe@10.11.247.123 
+
+getent group user42: Exibe informações sobre o grupo "user42" a partir do banco 
+de dados de grupos do sistema.
+
+
+sudo adduser new_username: Adiciona um novo usuário ao sistema.
+
+
+sudo groupadd groupname: Cria um novo grupo no sistema.
+
+
+sudo usermod -aG groupname username: Adiciona um usuário a um grupo existente.
+
+
+sudo chage -l username: Verifica as regras de expiração de senha para um usuário.
+
+
+hostnamectl: Exibe informações sobre o hostname do sistema.
+
+
+hostnamectl set-hostname new_hostname: Altera o hostname do sistema para "new_hostname".
+
+
+Restart your Virtual Machine: Reinicia a Máquina Virtual.
+
+
+sudo nano /etc/hosts: Edita o arquivo hosts para associar nomes de host a endereços IP.
+
+
+lsblk: Exibe informações sobre as partições de blocos de armazenamento.
+
+
+dpkg -l | grep sudo: Mostra se o sudo está instalado no sistema.
+
+
+sudo ufw status numbered: Exibe regras numeradas no UFW.
+
+
+sudo ufw allow port-id: Permite o tráfego na porta especificada usando o UFW.
+
+
+sudo ufw delete rule number: Exclui uma regra específica pelo número no UFW.
+
+
+ssh your_user_id@127.0.0.1 -p 4242: Inicia uma conexão SSH para o endereço local na porta 4242.
+
+
+lsb_release -a || cat /etc/os-release: Exibe informações sobre a distribuição do sistema usando o comando lsb_release ou, se indisponível, lê o arquivo /etc/os-release.
+
+
+
+
+
+---oq e uma virtual machine e pra que serve?
+um arquivo chamado de imagem, uma versao digital de um computador fisico. pode 
+ter um sistema operacional diferente no mesmo hardware, permite criar um 
+ambiente virtual no seu computador, voce pode fazer diversas alteracoes sem 
+afetar o sistema existente.
+
+
+---diferencas basicas entre CentOs e Debian?
+Centos 'e downstream da distro comercial RedHat Enterprise Linux (RHEL), 
+fornecem um sistema operacional de codigo aberto com uma plataforma gratuita de 
+classe empresarial, 'e confiavel por usa pacotes mais antigos, livres de bugs, 
+mais seguro, mas nao suporta muitas arquiteturas e sistemas de arquivos en tem 
+tantas atualizacoes.
+Debian e' a distribuicao upstream do linux que serve como base para outras 
+distribuicoes linux, incluindo o Ubuntu. semelhante ao Unix composto de 
+componentes de codigo aberto gratuitos. nao possui suporte comercial, 'e 
+mantido pelos proprios usuarios e e 'e usado principalmenete em servidores e 
+desktops, possui sistema de derenciamneto de pacotes o que facilita 
+atualizacoes e instalacao de pacotes. altamente flexivel, personalizavel, 
+suporta muitos sistemas de arquivos. arquiteturas e bibliotecas.
+
+
+---diferencas entre apt e aptitude
+sao duas ferramentas que tratam de gerenciamento de pacotes, ambos sao capazes 
+de lidar com todos os tipos de atividades em pacotes.
+apt 'e um gerenciador de pacotes padrao do debian, e 'e mais antigo.
+aptitude 'e um gerenciador de pacotes front-end, adiciona uma interface de 
+usuario, permitindo o usario pesquisar interativamente por um pacote e 
+intala-lo ou remove-lo.
+
+
+---AppArmor 'e um sistema de seguranca que pode ser usado pra restringir a 
+capacidade dos processos em execucao no sistema operacional do host, ja 'e 
+incluido no debian. COMANDO sudo aa-status
+
+
+---Display de informacoes, nao usei o crontab, usei o systemd 
+COMANDO /etc/systemd/system/monitoring.timer /etc/systemd/system/monitoring.service 
+e pra ativar o timer pela primeira vez:
+# make systemd aware of them
+sudo systemctl daemon-reload
+
+# make sure the timer is engaged at startup
+sudo systemctl enable monitoring.timer
+
+# start the timer "now" (without rebooting):
+sudo systemctl start monitoring.timer
+
+# examine the status:
+systemctl status monitoring.timer monitoring.service
+
+
+---SENHAS checar as regras da senha COMANDO sudo chage -l gmaia-pe (ou outro usuario)
+sao dois arquivos um que regra senhas comuns a todos como maiusculos minusculos 
+e etc e outro que fala sobre o tempo pra expirar.
+
+COMANDO sudo vim /etc/pam.d/common-password && sudo vim /etc/login.defs
+
+dcredit=-1 - define quantidade minima de caracteres pra menos -1
+difok=7 numero minimo de caracteres diferentes da senha anterior
+authtok - verfica se 'e uma senha que ja foi utilizada
+
+
+---UFW tem que estar ativo COMANDO sudo ufw status. UFW 'e Uncomplicated 
+Firewall é uma ferramenta de configuração de firewall para sistemas 
+operacionais Linux, projetada para simplificar o processo de gerenciamento de 
+firewalls. Ela fornece uma interface de linha de comando amigável para usuários,
+ facilitando a configuração e o controle do firewall no sistema. Util com a 
+SSH, da pra selecionar a porta que quer trabalhar.
+ 
+ 
+---LVM logical volume manager, permite manipular as particoes ou vloumes no
+armazanemento.
+
+
+---SSH secure shell mecanismo de autenticacao entre o cliente e o host. usa 
+tecnicas de encriptacao pra que toda a comunicao seja encriptada. pode trabalhar 
+no servidor atravas da chave ssh.
+
+
+script monitoring.sh
+
+#!/bin/bash: Indica que o script deve ser interpretado pelo Bash.
+
+
+ARCHITECTURE=$(uname -a): Armazena informações sobre a arquitetura do sistema.
+
+
+CPU=$(cat /proc/cpuinfo | grep 'physical id' | wc -l): Conta as CPUs físicas no sistema.
+
+
+VIRTUALCPU=$(cat /proc/cpuinfo | grep 'processor' | wc -l): Conta o número de CPUs virtuais.
+
+
+USAGERAM=$(free -m | grep "Mem:" | awk '{print $3}'): Obtém o uso de RAM atual.
+
+
+TOTALRAM=$(free -m | grep "Mem:" | awk '{print $2}'): Obtém a capacidade total de RAM.
+
+
+PERCENTRAM=$(free -m | grep "Mem:" | awk '{printf("%.2f"), $3/$2*100}'): Calcula a porcentagem de RAM utilizada.
+
+
+DSK1=$(df -m --total | grep "total" | awk '{print $3}'): Obtém o uso total de disco em MB.
+
+
+DSK2=$(df -h --total | grep "total" | awk '{printf ("%.0f"), $2}'): Obtém a capacidade total do
+disco em GB.
+
+
+DSK3=$(df -h --total | grep "total" | awk '{print $5}'): Obtém a porcentagem de uso total do disco.
+
+
+LCPU=$(top -bn1 | grep '^%Cpu' | awk '{printf("%.1f%%"), $2 + $4}'): Calcula a carga da CPU.
+
+
+LASTBOOT=$(who -b | awk '{print $3 " " $4 }'): Obtém a última data e hora de inicialização do sistema.
+
+
+USAGELVM=$(lsblk | if grep -q "lvm";then echo "yes"; else echo "no"; fi): Verifica se LVM está em uso.
+
+
+TCP=$(netstat | grep "tcp" | wc -l): Conta o número de conexões TCP.
+
+
+TCPM=$(netstat | if grep -q "tcp";then echo "ESTABLISHED";else echo "NOT ESTABLISHED"; fi): Verifica se há conexões TCP estabelecidas.
+
+
+LOGGEDUSERS=$(users | wc -w): Conta o número de usuários logados.
+
+
+NET=$(hostname -I | awk '{print $1}'): Obtém o endereço IP da máquina.
+
+
+MAC=$(ip link show | awk '$1 == "link/ether" {print $2}'): Obtém o endereço MAC da máquina.
+
+
+SUDO=$(cat /var/log/sudo/sudo.log | grep 'COMMAND' | wc -l): Conta o número de comandos sudo executados.
+
+
+wall "...": Exibe as informações coletadas na tela usando o comando wall.
