@@ -91,6 +91,10 @@ capacidade dos processos em execucao no sistema operacional do host, ja 'e
 incluido no debian. COMANDO sudo aa-status
 
 
+---LVM logical volume manager, permite manipular as particoes ou volumes no
+armazanemento.
+
+
 ---Display de informacoes, nao usei o crontab, usei o systemd 
 COMANDO /etc/systemd/system/monitoring.timer /etc/systemd/system/monitoring.service 
 e pra ativar o timer pela primeira vez:
@@ -125,10 +129,6 @@ firewalls. Ela fornece uma interface de linha de comando amigável para usuário
  facilitando a configuração e o controle do firewall no sistema. Util com a 
 SSH, da pra selecionar a porta que quer trabalhar.
  
- 
----LVM logical volume manager, permite manipular as particoes ou vloumes no
-armazanemento.
-
 
 ---SSH secure shell mecanismo de autenticacao entre o cliente e o host. usa 
 tecnicas de encriptacao pra que toda a comunicao seja encriptada. pode trabalhar 
@@ -136,6 +136,7 @@ no servidor atravas da chave ssh.
 
 
 script monitoring.sh
+COMANDO cd /usr/local/bin/monitoring.sh
 
 #!/bin/bash: Indica que o script deve ser interpretado pelo Bash.
 
